@@ -1,12 +1,22 @@
-import React from "react";
+import { HashRouter, Route, Routes } from 'react-router-dom'
 import ResetPasswordForm from "./components/ResetPasswordForm";
 
+
 function App() {
+
   return (
-    <div>
-      <ResetPasswordForm />
-    </div>
-  );
+    <>
+    <HashRouter>
+
+        <Routes>
+       
+            <Route exact path="/*" element={ <ResetPasswordForm />} />
+          
+        </Routes>
+     
+    </HashRouter>
+    </>
+  )
 }
 
-export default App;
+export default App
