@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography, Box, Alert } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { axios } from "../config/axios";
 
 const ResetPasswordForm = () => {
 
@@ -22,37 +23,32 @@ const ResetPasswordForm = () => {
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // if (formData.password !== formData.confirmPassword) {
     //   setError("Las contraseñas no coinciden.");
     //   setSuccess("");
     //   return;
     // }
-
+  
     try {
-      const response = await fetch(
-        "https://estadisticas.smt.gob.ar:6500/api/v0/auth/reset-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      axios.defaults.headers.common["Authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Njk3LCJpYXQiOjE3NDEyNTk2OTQsImV4cCI6MTc0MTM0NjA5NH0.QQSDJFJtKc0PaHBwn1VZJiyCp_1JKKjXHJud0UeqNc4";
 
-      if (!response.ok) {
+      const response = await axios.post(
+        "/api/v0/auth/reset-password",
+        formData);
+  
+      if (response.status === 200) {
+        setSuccess("Contraseña cambiada correctamente.");
+        setError("");
+        setFormData({ password: "", confirmPassword: "" });
+      } else {
         throw new Error("Error al cambiar la contraseña");
       }
-
-      setSuccess("Contraseña cambiada correctamente.");
-      setError("");
-      setFormData({ password: "", confirmPassword: "" });
     } catch (error) {
-      setError(error.message);
+      setError(error.response ? error.response.data.message : error.message);
       setSuccess("");
     }
   };
