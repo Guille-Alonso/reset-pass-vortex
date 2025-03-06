@@ -10,7 +10,7 @@ function App() {
 
         <Routes>
        
-            <Route exact path="/*" element={ <ResetPasswordForm />} />
+            <Route exact path="/reset-password/:token" element={ <ResetPasswordForm />} />
           
         </Routes>
      

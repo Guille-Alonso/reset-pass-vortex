@@ -7,7 +7,6 @@ const ResetPasswordForm = () => {
 
   const { token } = useParams(); // Captura el token desde la URL
 
-
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -34,7 +33,7 @@ const ResetPasswordForm = () => {
     // }
   
     try {
-      axios.defaults.headers.common["Authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Njk3LCJpYXQiOjE3NDEyNTk2OTQsImV4cCI6MTc0MTM0NjA5NH0.QQSDJFJtKc0PaHBwn1VZJiyCp_1JKKjXHJud0UeqNc4";
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       const response = await axios.post(
         "/api/v0/auth/reset-password",
@@ -48,7 +47,12 @@ const ResetPasswordForm = () => {
         throw new Error("Error al cambiar la contraseña");
       }
     } catch (error) {
-      setError(error.response ? error.response.data.message : error.message);
+      console.log(error);
+      const mensajes = error.response.data?.errorMessages?.map(err => err + "\n") || error.response.data.message;
+      console.log(mensajes);
+      
+      setError(mensajes)
+      // setError(error.response ? error.response.data.message : error.message);
       setSuccess("");
     }
   };
